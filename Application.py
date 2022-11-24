@@ -1,37 +1,29 @@
+from tkinter import *
+from tkinter import ttk
 import tkinter as tk
-from LoginPage import LoginPage
-from RegisterPage import RegisterPage
-from ToDo import ToDo
+
+class Application:
+    def __init__(self):
+        pass
 
 
-class Application(tk.Tk):
-    def __init__(self, *args, **kwargs):
-        tk.Tk.__init__(self, *args, **kwargs)
+    def getToDoSize(self):
+        pass
 
-        # creating a window
-        window = tk.Frame(self)
-        window.pack()
+    def getDoingSize(self):
+        pass
 
-        window.grid_rowconfigure(0, minsize=600)
-        window.grid_columnconfigure(0, minsize=900)
+    def getDoneSize(self):
+        pass
 
-        self.frames = {}
-        for element in (LoginPage, RegisterPage, ToDo):
-            frame = element(window, self)
-            self.frames[element] = frame
-            frame.grid(row=0, column=0, sticky="nsew")
+    def updateTodo(self):
+        pass
 
-        self.show_frame(LoginPage)
+    def updateDoing(self):
+        pass
 
-    def show_frame(self, page):
-        frame = self.frames[page]
-        frame.tkraise()
-        self.title("Workflow Application")
-
-
-app = Application()
-app.maxsize(1000, 600)
-app.mainloop()
+    def updateDone(self):
+        pass
 
 
 
