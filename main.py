@@ -12,7 +12,7 @@ def enter_release_text_handler_entry(event):
     print("Text entered = " + event.widget.get())
 
 def save_database(event):
-    f = open("/Users/gabby/Desktop/pythonProjectCS5007/db1.txt", "a")
+    f = open("db1.txt", "a")
     data = str(event.widget.get())
     f.write(data + "\n")
 
@@ -40,7 +40,7 @@ def createTask(widget):
 
 
 def main():
-    f = open("/Users/gabby/Desktop/pythonProjectCS5007/db1.txt", "a")
+    f = open("db1.txt", "a")
 
     app = Tk()
     app.title("Application")
@@ -157,7 +157,7 @@ def main():
 
     f.close()
     print(all_task)
-    taskCard = Task(all_task[0], all_task[1], all_task[2])
+    #taskCard = Task(all_task[0], all_task[1], all_task[2])
     taskCard = Frame(app, highlightcolor="pink", highlightbackground="pink", highlightthickness=5)
     taskCard.grid(row=1, column=1, sticky=N + S + E + W)
 
