@@ -33,10 +33,39 @@ def button_lambda_handler_updates(widget):
 def combobox_handler(event):
     print(event.widget["text"] + " Selected = " + str(event.widget.get()))
 
-def createTask(widget):
+def createTask(widget, todo, doing, done):
+    global all_task
     print("confirmed " + widget["text"] + " TASK CREATED")
     newTask = Task(all_task[0], all_task[1], all_task[2])
     print(newTask.getStatus())
+    if all_task[2] == 'To Do':
+        task_frame = Frame(todo, highlightcolor="blue", highlightbackground="blue", highlightthickness=5)
+        task_frame.pack()
+        name_label = ttk.Label(task_frame)
+        name_label["text"] = all_task[0]
+        name_label.pack()
+        date_label = ttk.Label(task_frame)
+        date_label["text"] = all_task[1]
+        date_label.pack()
+    if all_task[2] == 'Doing':
+        task_frame = Frame(doing, highlightcolor="blue", highlightbackground="blue", highlightthickness=5)
+        task_frame.pack()
+        name_label = ttk.Label(task_frame)
+        name_label["text"] = all_task[0]
+        name_label.pack()
+        date_label = ttk.Label(task_frame)
+        date_label["text"] = all_task[1]
+        date_label.pack()
+    if all_task[2] == 'Done':
+        task_frame = Frame(done, highlightcolor="blue", highlightbackground="blue", highlightthickness=5)
+        task_frame.pack()
+        name_label = ttk.Label(task_frame)
+        name_label["text"] = all_task[0]
+        name_label.pack()
+        date_label = ttk.Label(task_frame)
+        date_label["text"] = all_task[1]
+        date_label.pack()
+    all_task = []
 def add_task_button(event):
     print("test")
 
@@ -78,6 +107,15 @@ def main():
     add_button = ttk.Button(app)
     add_button["text"] = "Add Task"
     add_button.grid(row=0, column=2)
+
+    todo_frame = Frame(app, highlightcolor="pink", highlightbackground="pink", highlightthickness=5)
+    todo_frame.grid(row=2, column=0)
+
+    doing_frame = Frame(app, highlightcolor="pink", highlightbackground="pink", highlightthickness=5)
+    doing_frame.grid(row=2, column=1)
+
+    done_frame = Frame(app, highlightcolor="pink", highlightbackground="pink", highlightthickness=5)
+    done_frame.grid(row=2, column=2)
 
 
     root = Tk()
@@ -130,7 +168,7 @@ def main():
                                     command=lambda: button_lambda_handler_updates(radio_button1))
 
     radio_button2 = ttk.Radiobutton(root, value=1, variable=control, text="Done",
-                                    command=lambda: createTask(radio_button2))
+                                    command=lambda: createTask(radio_button2, todo_frame, doing_frame, done_frame))
 
 
     radio_button1.grid(row=3, column=0)
