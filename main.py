@@ -37,6 +37,8 @@ def createTask(widget):
     print("confirmed " + widget["text"] + " TASK CREATED")
     newTask = Task(all_task[0], all_task[1], all_task[2])
     print(newTask.getStatus())
+def add_task_button(event):
+    print("test")
 
 
 def main():
@@ -50,11 +52,12 @@ def main():
 
     # limit max 5 tasks each column for application
     app.rowconfigure(0, weight=1)
-    app.rowconfigure(1, weight=2)
+    app.rowconfigure(1, weight=1)
     app.rowconfigure(2, weight=2)
     app.rowconfigure(3, weight=2)
     app.rowconfigure(4, weight=2)
     app.rowconfigure(5, weight=2)
+    app.rowconfigure(6, weight=2)
 
     app.columnconfigure(0, weight=1)
     app.columnconfigure(1, weight=1)
@@ -62,15 +65,20 @@ def main():
 
     label1 = ttk.Label(app)
     label1["text"] = "TO DO"
-    label1.grid(row=0, column=0)
+    label1.grid(row=1, column=0)
 
     label2 = ttk.Label(app)
     label2["text"] = "DOING"
-    label2.grid(row=0, column=1)
+    label2.grid(row=1, column=1)
 
     label3 = ttk.Label(app)
     label3["text"] = "DONE"
-    label3.grid(row=0, column=2)
+    label3.grid(row=1, column=2)
+
+    add_button = ttk.Button(app)
+    add_button["text"] = "Add Task"
+    add_button.grid(row=0, column=2)
+
 
     root = Tk()
     root.title('Entry Box')
@@ -117,11 +125,11 @@ def main():
     text_field2.grid(row=1, column=1)
 
 
-    control = StringVar()
+    control = IntVar()
     radio_button1 = ttk.Radiobutton(root, value=0, variable=control, text="set Reminder",
                                     command=lambda: button_lambda_handler_updates(radio_button1))
 
-    radio_button2 = ttk.Radiobutton(root, value=0, variable=control, text="Done",
+    radio_button2 = ttk.Radiobutton(root, value=1, variable=control, text="Done",
                                     command=lambda: createTask(radio_button2))
 
 
@@ -139,12 +147,14 @@ def main():
     combo_box1.state(["readonly"])
 
     combo_box1["values"] = ["To Do", "Doing", "Done"]
-    combo_box1.current(0)
 
     combo_box1.grid(row=2, column=1)
 
     combo_box1.bind("<<ComboboxSelected>>", combobox_handler)
     combo_box1.bind("<<ComboboxSelected>>", collect_status, add = '+')
+
+
+    add_button.bind("<Button-1>", add_task_button)
 
 
 
@@ -157,7 +167,7 @@ def main():
 
     f.close()
     print(all_task)
-    #taskCard = Task(all_task[0], all_task[1], all_task[2])
+    taskCard = Task(all_task[0], all_task[1], all_task[2])
     taskCard = Frame(app, highlightcolor="pink", highlightbackground="pink", highlightthickness=5)
     taskCard.grid(row=1, column=1, sticky=N + S + E + W)
 
