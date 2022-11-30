@@ -1,5 +1,5 @@
 # CS5007
-from Task import Task
+from task import Task
 from Application import Application
 
 from tkinter import *
