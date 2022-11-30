@@ -1,5 +1,10 @@
 # CS5007
-from Task import Task
+<<<<<<< Updated upstream
+from task import Task
+=======
+from task import Task
+from Application import Application
+>>>>>>> Stashed changes
 
 from tkinter import *
 from tkinter import ttk
