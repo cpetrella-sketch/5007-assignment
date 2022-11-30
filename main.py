@@ -1,7 +1,10 @@
 # CS5007
+<<<<<<< Updated upstream
 # <<<<<<< Updated upstream
 from task import Task
 # =======
+=======
+>>>>>>> Stashed changes
 from task import Task
 from Application import Application
 # >>>>>>> Stashed changes

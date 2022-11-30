@@ -46,7 +46,10 @@ test
 Hey
 Look
 the hell
+<<<<<<< Updated upstream
 heii
 fahksl
 the hell
+=======
+>>>>>>> Stashed changes
 the hell
