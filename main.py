@@ -1,12 +1,12 @@
 # CS5007
-<<<<<<< Updated upstream
+# <<<<<<< Updated upstream
 # <<<<<<< Updated upstream
 from task import Task
 # =======
-=======
->>>>>>> Stashed changes
+# =======
+# >>>>>>> Stashed changes
 from task import Task
-from Application import Application
+# from Application import Application
 # >>>>>>> Stashed changes
 
 from tkinter import *
