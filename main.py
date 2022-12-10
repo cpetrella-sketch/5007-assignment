@@ -17,7 +17,6 @@ def save_database(event):
     f.write(data + "\n")
 
 def collect_taskName(event):
-    print('WTF')
     all_task.append(str(event.widget.get()))
 
 def collect_dueDate(event):
@@ -33,7 +32,7 @@ def button_lambda_handler_updates(widget):
 def combobox_handler(event):
     print(event.widget["text"] + " Selected = " + str(event.widget.get()))
 
-def createTask(widget, todo, doing, done):
+def createTask(widget, todo, doing, done, app):
     global all_task
     print("confirmed " + widget["text"] + " TASK CREATED")
     newTask = Task(all_task[0], all_task[1], all_task[2])
@@ -47,6 +46,8 @@ def createTask(widget, todo, doing, done):
         date_label = ttk.Label(task_frame)
         date_label["text"] = all_task[1]
         date_label.pack()
+        delete_button = ttk.Button(task_frame, command=lambda: delete_frame(task_frame))
+        delete_button.pack()
     if all_task[2] == 'Doing':
         task_frame = Frame(doing, highlightcolor="blue", highlightbackground="blue", highlightthickness=5)
         task_frame.pack()
@@ -56,6 +57,8 @@ def createTask(widget, todo, doing, done):
         date_label = ttk.Label(task_frame)
         date_label["text"] = all_task[1]
         date_label.pack()
+        delete_button = ttk.Button(task_frame, command=lambda: delete_frame(task_frame))
+        delete_button.pack()
     if all_task[2] == 'Done':
         task_frame = Frame(done, highlightcolor="blue", highlightbackground="blue", highlightthickness=5)
         task_frame.pack()
@@ -65,10 +68,13 @@ def createTask(widget, todo, doing, done):
         date_label = ttk.Label(task_frame)
         date_label["text"] = all_task[1]
         date_label.pack()
+        delete_button = ttk.Button(task_frame, command=lambda: delete_frame(task_frame))
+        delete_button.pack()
     all_task = []
 def add_task_button(event):
     print("test")
-
+def delete_frame(frame):
+    frame.destroy()
 
 def main():
     f = open("db1.txt", "a")
@@ -168,11 +174,11 @@ def main():
                                     command=lambda: button_lambda_handler_updates(radio_button1))
 
     radio_button2 = ttk.Radiobutton(root, value=1, variable=control, text="Done",
-                                    command=lambda: createTask(radio_button2, todo_frame, doing_frame, done_frame))
+                                    command=lambda: createTask(radio_button2, todo_frame, doing_frame, done_frame, app))
 
 
     radio_button1.grid(row=3, column=0)
-    radio_button2.grid(row = 3, column = 1)
+    radio_button2.grid(row=3, column=1)
 
     text_field1.bind("<KeyRelease-Return>", enter_release_text_handler_entry)
     text_field1.bind("<KeyRelease-Return>", save_database, add = '+')
@@ -194,22 +200,7 @@ def main():
 
     add_button.bind("<Button-1>", add_task_button)
 
-
-
-
-    f.write('the hell\n')
-
-    #print(all_task)
-
     root.mainloop()
-
-    f.close()
-    print(all_task)
-    taskCard = Task(all_task[0], all_task[1], all_task[2])
-    taskCard = Frame(app, highlightcolor="pink", highlightbackground="pink", highlightthickness=5)
-    taskCard.grid(row=1, column=1, sticky=N + S + E + W)
-
-
     app.mainloop()
 
 # Press the green button in the gutter to run the script.
