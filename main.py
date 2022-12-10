@@ -47,6 +47,7 @@ def createTask(widget, todo, doing, done, app):
         date_label["text"] = all_task[1]
         date_label.pack()
         delete_button = ttk.Button(task_frame, command=lambda: delete_frame(task_frame))
+        delete_button["text"] = "Delete"
         delete_button.pack()
     if all_task[2] == 'Doing':
         task_frame = Frame(doing, highlightcolor="blue", highlightbackground="blue", highlightthickness=5)
@@ -58,6 +59,7 @@ def createTask(widget, todo, doing, done, app):
         date_label["text"] = all_task[1]
         date_label.pack()
         delete_button = ttk.Button(task_frame, command=lambda: delete_frame(task_frame))
+        delete_button["text"] = "Delete"
         delete_button.pack()
     if all_task[2] == 'Done':
         task_frame = Frame(done, highlightcolor="blue", highlightbackground="blue", highlightthickness=5)
@@ -69,6 +71,7 @@ def createTask(widget, todo, doing, done, app):
         date_label["text"] = all_task[1]
         date_label.pack()
         delete_button = ttk.Button(task_frame, command=lambda: delete_frame(task_frame))
+        delete_button["text"] = "Delete"
         delete_button.pack()
     all_task = []
 def add_task_button(event):
