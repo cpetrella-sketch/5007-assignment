@@ -17,13 +17,13 @@ def save_database(event):
     f.write(data + "\n")
 
 def collect_taskName(event):
-    all_task.append(str(event.widget.get()))
+    all_task[0]= (str(event.widget.get()))
 
 def collect_dueDate(event):
-    all_task.append(str(event.widget.get()))
+    all_task[1]= (str(event.widget.get()))
 
 def collect_status(event):
-    all_task.append(str(event.widget.get()))
+    all_task[2]= (str(event.widget.get()))
 
 def button_lambda_handler_updates(widget):
     print("confirmed "+ widget["text"])
@@ -46,6 +46,9 @@ def createTask(widget, todo, doing, done, app):
         date_label = ttk.Label(task_frame)
         date_label["text"] = all_task[1]
         date_label.pack()
+        update_button = ttk.Button(task_frame, command=lambda: update_frame(name_label, date_label))
+        update_button["text"] = "Update"
+        update_button.pack()
         delete_button = ttk.Button(task_frame, command=lambda: delete_frame(task_frame))
         delete_button["text"] = "Delete"
         delete_button.pack()
@@ -58,6 +61,9 @@ def createTask(widget, todo, doing, done, app):
         date_label = ttk.Label(task_frame)
         date_label["text"] = all_task[1]
         date_label.pack()
+        update_button = ttk.Button(task_frame, command=lambda: update_frame(name_label, date_label))
+        update_button["text"] = "Update"
+        update_button.pack()
         delete_button = ttk.Button(task_frame, command=lambda: delete_frame(task_frame))
         delete_button["text"] = "Delete"
         delete_button.pack()
@@ -70,6 +76,9 @@ def createTask(widget, todo, doing, done, app):
         date_label = ttk.Label(task_frame)
         date_label["text"] = all_task[1]
         date_label.pack()
+        update_button = ttk.Button(task_frame, command=lambda: update_frame(name_label, date_label))
+        update_button["text"] = "Update"
+        update_button.pack()
         delete_button = ttk.Button(task_frame, command=lambda: delete_frame(task_frame))
         delete_button["text"] = "Delete"
         delete_button.pack()
@@ -78,6 +87,39 @@ def add_task_button(event):
     print("test")
 def delete_frame(frame):
     frame.destroy()
+def update_frame(name_label, date_label):
+    update = Tk()
+    label1 = ttk.Label(update)
+    label1["text"] = "TaskName: "
+    label1.grid(row=0, column=0, sticky=tk.W)
+
+    label2 = ttk.Label(update)
+    label2["text"] = "DueDate: "
+    label2.grid(row=1, column=0, sticky=tk.W)
+
+    label3 = ttk.Label(update)
+    label3["text"] = "Status: "
+    label3.grid(row=2, column=0, sticky=tk.W)
+
+    text_field1 = ttk.Entry(update)
+    text_field1.grid(row=0, column=1)
+    submit_1 = ttk.Button(update, command=lambda: update_entry(text_field1, name_label))
+    submit_1.grid(row=0, column=2)
+
+    text_field2 = ttk.Entry(update)
+    text_field2.grid(row=1, column=1)
+    submit_2 = ttk.Button(update, command=lambda: update_entry(text_field1, date_label))
+    submit_2.grid(row=0, column=2)
+
+    combo_box1 = ttk.Combobox(update)
+    combo_box1.state(["readonly"])
+
+    combo_box1["values"] = ["To Do", "Doing", "Done"]
+
+    combo_box1.grid(row=2, column=1)
+    update.mainloop()
+def update_entry(event, label):
+    label["text"] = event.get()
 
 def main():
     f = open("db1.txt", "a")
