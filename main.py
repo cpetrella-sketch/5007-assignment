@@ -6,7 +6,7 @@ from tkinter import *
 from tkinter import ttk
 import tkinter as tk
 
-all_task = []
+all_task = ["No_Name", "No_Date", "To Do"]
 
 def enter_release_text_handler_entry(event):
     print("Text entered = " + event.widget.get())
@@ -38,51 +38,26 @@ def createTask(widget, todo, doing, done, app):
     newTask = Task(all_task[0], all_task[1], all_task[2])
     print(newTask.getStatus())
     if all_task[2] == 'To Do':
-        task_frame = Frame(todo, highlightcolor="blue", highlightbackground="blue", highlightthickness=5)
-        task_frame.pack()
-        name_label = ttk.Label(task_frame)
-        name_label["text"] = all_task[0]
-        name_label.pack()
-        date_label = ttk.Label(task_frame)
-        date_label["text"] = all_task[1]
-        date_label.pack()
-        update_button = ttk.Button(task_frame, command=lambda: update_frame(name_label, date_label))
-        update_button["text"] = "Update"
-        update_button.pack()
-        delete_button = ttk.Button(task_frame, command=lambda: delete_frame(task_frame))
-        delete_button["text"] = "Delete"
-        delete_button.pack()
+        clmn = todo
     if all_task[2] == 'Doing':
-        task_frame = Frame(doing, highlightcolor="blue", highlightbackground="blue", highlightthickness=5)
-        task_frame.pack()
-        name_label = ttk.Label(task_frame)
-        name_label["text"] = all_task[0]
-        name_label.pack()
-        date_label = ttk.Label(task_frame)
-        date_label["text"] = all_task[1]
-        date_label.pack()
-        update_button = ttk.Button(task_frame, command=lambda: update_frame(name_label, date_label))
-        update_button["text"] = "Update"
-        update_button.pack()
-        delete_button = ttk.Button(task_frame, command=lambda: delete_frame(task_frame))
-        delete_button["text"] = "Delete"
-        delete_button.pack()
+        clmn = doing
     if all_task[2] == 'Done':
-        task_frame = Frame(done, highlightcolor="blue", highlightbackground="blue", highlightthickness=5)
-        task_frame.pack()
-        name_label = ttk.Label(task_frame)
-        name_label["text"] = all_task[0]
-        name_label.pack()
-        date_label = ttk.Label(task_frame)
-        date_label["text"] = all_task[1]
-        date_label.pack()
-        update_button = ttk.Button(task_frame, command=lambda: update_frame(name_label, date_label))
-        update_button["text"] = "Update"
-        update_button.pack()
-        delete_button = ttk.Button(task_frame, command=lambda: delete_frame(task_frame))
-        delete_button["text"] = "Delete"
-        delete_button.pack()
-    all_task = []
+        clmn = done
+    task_frame = Frame(clmn, highlightcolor="blue", highlightbackground="blue", highlightthickness=5)
+    task_frame.pack()
+    name_label = ttk.Label(task_frame)
+    name_label["text"] = all_task[0]
+    name_label.pack()
+    date_label = ttk.Label(task_frame)
+    date_label["text"] = all_task[1]
+    date_label.pack()
+    update_button = ttk.Button(task_frame, command=lambda: update_frame(name_label, date_label))
+    update_button["text"] = "Update"
+    update_button.pack()
+    delete_button = ttk.Button(task_frame, command=lambda: delete_frame(task_frame))
+    delete_button["text"] = "Delete"
+    delete_button.pack()
+    all_task = ["No_Name", "No_Date", "To Do"]
 def add_task_button(event):
     print("test")
 def delete_frame(frame):
@@ -108,8 +83,8 @@ def update_frame(name_label, date_label):
 
     text_field2 = ttk.Entry(update)
     text_field2.grid(row=1, column=1)
-    submit_2 = ttk.Button(update, command=lambda: update_entry(text_field1, date_label))
-    submit_2.grid(row=0, column=2)
+    submit_2 = ttk.Button(update, command=lambda: update_entry(text_field2, date_label))
+    submit_2.grid(row=1, column=2)
 
     combo_box1 = ttk.Combobox(update)
     combo_box1.state(["readonly"])
