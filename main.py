@@ -66,7 +66,9 @@ def createTask(widget, todo, doing, done):
         date_label["text"] = all_task[1]
         date_label.pack()
     all_task = []
-def add_task_button(event):
+def add_task_button():
+
+
     print("test")
 
 
@@ -107,7 +109,7 @@ def main():
     add_button = ttk.Button(app)
     add_button["text"] = "Add Task"
     add_button.grid(row=0, column=2)
-
+    #
     todo_frame = Frame(app, highlightcolor="pink", highlightbackground="pink", highlightthickness=5)
     todo_frame.grid(row=2, column=0)
 
@@ -168,7 +170,11 @@ def main():
                                     command=lambda: button_lambda_handler_updates(radio_button1))
 
     radio_button2 = ttk.Radiobutton(root, value=1, variable=control, text="Done",
+<<<<<<< Updated upstream
                                     command=lambda: createTask(radio_button2, todo_frame, doing_frame, done_frame))
+=======
+                                    command=lambda: createTask(radio_button2, todo_frame, doing_frame, done_frame,app))
+>>>>>>> Stashed changes
 
 
     radio_button1.grid(row=3, column=0)
