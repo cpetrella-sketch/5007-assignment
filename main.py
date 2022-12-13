@@ -2,12 +2,16 @@
 from Task import Task
 from Application import Application
 
+from datetime import datetime
 from tkinter import *
 from tkinter import ttk
 import tkinter as tk
 
-all_task = ["No_Name", "No_Date", "To Do"]
-
+#all_task = []
+all_task = ["No_Name", "No_Date", "Doing"]
+all_Doing_task = {}
+#all_Doing_task = []
+#all_Done_task = []
 def enter_release_text_handler_entry(event):
     print("Text entered = " + event.widget.get())
 
@@ -32,8 +36,30 @@ def button_lambda_handler_updates(widget):
 def combobox_handler(event):
     print(event.widget["text"] + " Selected = " + str(event.widget.get()))
 
-def createTask(widget, todo, doing, done, box):
-    global all_task
+def sort_doing(all_Doing_task, todo, doing, done, widget):
+    listDate = []
+    # Step 1: delete all tasks in Doing
+    for key in all_Doing_task:
+        listDate.append(key)
+        frame = all_Doing_task[key][1]
+        delete_frame(frame)
+
+    # Step 2: sort all tasks based on due date
+    listDate.sort(key=lambda date: datetime.strptime(date, "%d-%m-%Y "))
+    print(listDate)
+    new_list_task = []
+    for d in listDate:
+        new_list_task = [all_Doing_task[d][0], d, "Doing"]
+        print("print in all task")
+        print()
+        root = all_Doing_task[d][1]
+        #all_task = new_list_task
+        #print(all_task)
+        createTask(widget, todo, doing, done, root, new_list_task)
+    # step 3: loop through list of sorted task to create new tasks in Doing
+
+
+def createTask(widget, todo, doing, done, box, all_task):
     print("confirmed " + widget["text"] + " TASK CREATED")
     newTask = Task(all_task[0], all_task[1], all_task[2])
     print(newTask.getStatus())
@@ -41,9 +67,15 @@ def createTask(widget, todo, doing, done, box):
         clmn = todo
     if all_task[2] == 'Doing':
         clmn = doing
+        all_Doing_task[all_task[1]] = [all_task[0]]   # assign date key to name
+        print("print current all_DOING")
+        print(all_Doing_task)
     if all_task[2] == 'Done':
         clmn = done
     task_frame = Frame(clmn, highlightcolor="blue", highlightbackground="blue", highlightthickness=5)
+    if all_task[2] == 'Doing':
+        all_Doing_task[all_task[1]].append(task_frame)   # assign date key to task frame
+    print(all_Doing_task)
     task_frame.pack()
     name_label = ttk.Label(task_frame)
     name_label["text"] = all_task[0]
@@ -57,7 +89,7 @@ def createTask(widget, todo, doing, done, box):
     delete_button = ttk.Button(task_frame, command=lambda: delete_frame(task_frame))
     delete_button["text"] = "Delete"
     delete_button.pack()
-    all_task = ["No_Name", "No_Date", "To Do"]
+    all_task = [all_task[0], all_task[1], "Doing"]
     box.destroy()
 def add_task_button(todo_frame, doing_frame, done_frame):
     root = Tk()
@@ -90,7 +122,7 @@ def add_task_button(todo_frame, doing_frame, done_frame):
     label1.grid(row=0, column=0, sticky=tk.W)
 
     label2 = ttk.Label(root)
-    label2["text"] = "DueDate: "
+    label2["text"] = "DueDate (DD-MM-YYYY ): "
     label2.grid(row=1, column=0, sticky=tk.W)
 
     label3 = ttk.Label(root)
@@ -108,7 +140,7 @@ def add_task_button(todo_frame, doing_frame, done_frame):
                                     command=lambda: button_lambda_handler_updates(radio_button1))
 
     radio_button2 = ttk.Radiobutton(root, value=1, variable=control, text="Done",
-                                    command=lambda: createTask(radio_button2, todo_frame, doing_frame, done_frame, root))
+                                    command=lambda: createTask(radio_button2, todo_frame, doing_frame, done_frame, root, all_task))
 
     radio_button1.grid(row=3, column=0)
     radio_button2.grid(row=3, column=1)
@@ -135,8 +167,11 @@ def add_task_button(todo_frame, doing_frame, done_frame):
     root.mainloop()
 def delete_frame(frame):
     frame.destroy()
+
 def update_frame(name_label, date_label):
     update = Tk()
+    update.title("UPDATE!")
+
     label1 = ttk.Label(update)
     label1["text"] = "TaskName: "
     label1.grid(row=0, column=0, sticky=tk.W)
@@ -165,6 +200,11 @@ def update_frame(name_label, date_label):
     combo_box1["values"] = ["To Do", "Doing", "Done"]
 
     combo_box1.grid(row=2, column=1)
+
+    combo_box1.bind("<<ComboboxSelected>>", combobox_handler)
+    combo_box1.bind("<<ComboboxSelected>>", collect_status, add='+')
+
+
     update.mainloop()
 def update_entry(event, label):
     label["text"] = event.get()
@@ -178,22 +218,42 @@ def main():
 
     app.geometry('600x800')
 
-    # limit max 5 tasks each column for application
+# format main frame
     app.rowconfigure(0, weight=1)
     app.rowconfigure(1, weight=1)
-    app.rowconfigure(2, weight=2)
-    app.rowconfigure(3, weight=2)
-    app.rowconfigure(4, weight=2)
-    app.rowconfigure(5, weight=2)
-    app.rowconfigure(6, weight=2)
+    app.rowconfigure(2, weight=10)
+
 
     app.columnconfigure(0, weight=1)
     app.columnconfigure(1, weight=1)
     app.columnconfigure(2, weight=1)
 
+    row11 = Frame(app, highlightcolor="black", highlightbackground="black", highlightthickness=5)
+    row11.grid(row=1, column=0, sticky=N + S + E + W)
+
+    row12 = Frame(app, highlightcolor="black", highlightbackground="black", highlightthickness=5)
+    row12.grid(row=1, column=1, sticky=N + S + E + W)
+
+    row13 = Frame(app, highlightcolor="black", highlightbackground="black", highlightthickness=5)
+    row13.grid(row=1, column=2, sticky=N + S + E + W)
+
+    row21 = Frame(app, highlightcolor="cyan", highlightbackground="cyan", highlightthickness=5)
+    row21.grid(row=2, column=0, sticky=N + S + E + W)
+
+    row22 = Frame(app, highlightcolor="yellow", highlightbackground="yellow", highlightthickness=5)
+    row22.grid(row=2, column=1, sticky=N + S + E + W)
+
+    row23 = Frame(app, highlightcolor="red", highlightbackground="red", highlightthickness=5)
+    row23.grid(row=2, column=2, sticky=N + S + E + W)
+
     label1 = ttk.Label(app)
     label1["text"] = "TO DO"
     label1.grid(row=1, column=0)
+
+    sort_button = ttk.Button(app, command=lambda: sort_doing(all_Doing_task, todo_frame, doing_frame, done_frame, sort_button))
+    sort_button["text"] = "Sort DOING"
+    sort_button.grid(row=0, column=1)
+
 
     label2 = ttk.Label(app)
     label2["text"] = "DOING"
@@ -207,6 +267,8 @@ def main():
     add_button["text"] = "Add Task"
     add_button.grid(row=0, column=2)
 
+# format each task frame
+
     todo_frame = Frame(app, highlightcolor="pink", highlightbackground="pink", highlightthickness=5)
     todo_frame.grid(row=2, column=0)
 
@@ -215,6 +277,9 @@ def main():
 
     done_frame = Frame(app, highlightcolor="pink", highlightbackground="pink", highlightthickness=5)
     done_frame.grid(row=2, column=2)
+
+
+
     app.mainloop()
 
 # Press the green button in the gutter to run the script.
