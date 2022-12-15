@@ -71,14 +71,14 @@ def createTask(widget, todo, doing, done, box, all_task):
     print(newTask.getStatus())
     if all_task[2] == 'To Do':
         clmn = todo
-        share_todo.append(all_task[0], all_task[1])
+        share_todo.append([all_task[0], all_task[1]])
     if all_task[2] == 'Doing':
         clmn = doing
         all_Doing_task[all_task[1]] = [all_task[0]]   # assign date key to name
-        share_doing.append(all_task[0], all_task[1])
+        share_doing.append([all_task[0], all_task[1]])
     if all_task[2] == 'Done':
         clmn = done
-        share_done.append(all_task[0], all_task[1])
+        share_done.append([all_task[0], all_task[1]])
     task_frame = Frame(clmn, highlightcolor="blue", highlightbackground="blue", highlightthickness=5)
     if all_task[2] == 'Doing':
         all_Doing_task[all_task[1]].append(task_frame)   # assign date key to task frame
@@ -90,7 +90,7 @@ def createTask(widget, todo, doing, done, box, all_task):
     date_label = ttk.Label(task_frame)
     date_label["text"] = all_task[1]
     date_label.pack()
-    update_button = ttk.Button(task_frame, command=lambda: update_frame(name_label, date_label))
+    update_button = ttk.Button(task_frame, command=lambda: update_frame(name_label, date_label, temp, all_task[0], all_task[1]))
     update_button["text"] = "Update"
     update_button.pack()
     delete_button = ttk.Button(task_frame, command=lambda: delete_frame(task_frame, temp, all_task[0], all_task[1]))
@@ -181,7 +181,7 @@ def delete_frame(frame, clmn, name, date):
         share_done.remove([name, date])
     frame.destroy()
 
-def update_frame(name_label, date_label):
+def update_frame(name_label, date_label, clmn, name, date):
     update = Tk()
     update.title("UPDATE!")
 
@@ -199,12 +199,12 @@ def update_frame(name_label, date_label):
 
     text_field1 = ttk.Entry(update)
     text_field1.grid(row=0, column=1)
-    submit_1 = ttk.Button(update, command=lambda: update_entry(text_field1, name_label))
+    submit_1 = ttk.Button(update, command=lambda: update_entry(text_field1, name_label, 1, clmn, name, date))
     submit_1.grid(row=0, column=2)
 
     text_field2 = ttk.Entry(update)
     text_field2.grid(row=1, column=1)
-    submit_2 = ttk.Button(update, command=lambda: update_entry(text_field2, date_label))
+    submit_2 = ttk.Button(update, command=lambda: update_entry(text_field2, date_label, 2, clmn, name, date))
     submit_2.grid(row=1, column=2)
 
     combo_box1 = ttk.Combobox(update)
@@ -219,11 +219,31 @@ def update_frame(name_label, date_label):
 
 
     update.mainloop()
-def update_entry(event, label):
+def update_entry(event, label, num, clmn, name, date):
     label["text"] = event.get()
+    if num == 1:
+        if clmn == "To Do":
+            share_todo.remove([name, date])
+            share_todo.append([label, date])
+        if clmn == "Doing":
+            share_doing.remove([name, date])
+            share_doing.append([label, date])
+        if clmn == "Done":
+            share_done.remove([name, date])
+            share_done.append([label, date])
+    if num == 2:
+        if clmn == "To Do":
+            share_todo.remove([name, date])
+            share_todo.append([name, label])
+        if clmn == "Doing":
+            share_doing.remove([name, date])
+            share_doing.append([name, label])
+        if clmn == "Done":
+            share_done.remove([name, date])
+            share_done.append([name, label])
 
 def share_tasks():
-    with open("output.csv" 'w') as f:
+    with open("output.csv", 'w') as f:
         wrtr = csv.writer(f)
         head = ["Status", "Name", "Date"]
         wrtr.writerow(head)
