@@ -1,4 +1,6 @@
 # CS5007
+import csv
+
 from Task import Task
 from Application import Application
 
@@ -10,6 +12,9 @@ import tkinter as tk
 #all_task = []
 all_task = ["No_Name", "No_Date", "Doing"]
 all_Doing_task = {}
+share_todo = []
+share_doing = []
+share_done = []
 #all_Doing_task = []
 #all_Done_task = []
 def enter_release_text_handler_entry(event):
@@ -60,18 +65,20 @@ def sort_doing(all_Doing_task, todo, doing, done, widget):
 
 
 def createTask(widget, todo, doing, done, box, all_task):
+    temp = all_task[2]
     print("confirmed " + widget["text"] + " TASK CREATED")
     newTask = Task(all_task[0], all_task[1], all_task[2])
     print(newTask.getStatus())
     if all_task[2] == 'To Do':
         clmn = todo
+        share_todo.append(all_task[0], all_task[1])
     if all_task[2] == 'Doing':
         clmn = doing
         all_Doing_task[all_task[1]] = [all_task[0]]   # assign date key to name
-        print("print current all_DOING")
-        print(all_Doing_task)
+        share_doing.append(all_task[0], all_task[1])
     if all_task[2] == 'Done':
         clmn = done
+        share_done.append(all_task[0], all_task[1])
     task_frame = Frame(clmn, highlightcolor="blue", highlightbackground="blue", highlightthickness=5)
     if all_task[2] == 'Doing':
         all_Doing_task[all_task[1]].append(task_frame)   # assign date key to task frame
@@ -86,7 +93,7 @@ def createTask(widget, todo, doing, done, box, all_task):
     update_button = ttk.Button(task_frame, command=lambda: update_frame(name_label, date_label))
     update_button["text"] = "Update"
     update_button.pack()
-    delete_button = ttk.Button(task_frame, command=lambda: delete_frame(task_frame))
+    delete_button = ttk.Button(task_frame, command=lambda: delete_frame(task_frame, temp, all_task[0], all_task[1]))
     delete_button["text"] = "Delete"
     delete_button.pack()
     all_task = [all_task[0], all_task[1], "Doing"]
@@ -165,7 +172,13 @@ def add_task_button(todo_frame, doing_frame, done_frame):
 
 
     root.mainloop()
-def delete_frame(frame):
+def delete_frame(frame, clmn, name, date):
+    if clmn == "To Do":
+        share_todo.remove([name, date])
+    if clmn == "Doing":
+        share_doing.remove([name, date])
+    if clmn == "Done":
+        share_done.remove([name, date])
     frame.destroy()
 
 def update_frame(name_label, date_label):
@@ -208,6 +221,21 @@ def update_frame(name_label, date_label):
     update.mainloop()
 def update_entry(event, label):
     label["text"] = event.get()
+
+def share_tasks():
+    with open("output.csv" 'w') as f:
+        wrtr = csv.writer(f)
+        head = ["Status", "Name", "Date"]
+        wrtr.writerow(head)
+        for i in share_todo:
+            temp = ["To Do", i[0], i[1]]
+            wrtr.writerow(temp)
+        for i in share_doing:
+            temp = ["Doing", i[0], i[1]]
+            wrtr.writerow(temp)
+        for i in share_done:
+            temp = ["Done", i[0], i[1]]
+            wrtr.writerow(temp)
 
 def main():
     f = open("db1.txt", "a")
@@ -266,6 +294,10 @@ def main():
     add_button = ttk.Button(app, command=lambda: add_task_button(todo_frame, doing_frame, done_frame))
     add_button["text"] = "Add Task"
     add_button.grid(row=0, column=2)
+
+    share_button = ttk.Button(app, command=lambda: share_tasks())
+    share_button["text"] = "Share"
+    share_button.grid(row=0, column=0)
 
 # format each task frame
 
