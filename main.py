@@ -15,6 +15,7 @@ all_Doing_task = {}
 share_todo = []
 share_doing = []
 share_done = []
+priority = []
 #all_Doing_task = []
 #all_Done_task = []
 def enter_release_text_handler_entry(event):
@@ -37,6 +38,9 @@ def collect_status(event):
 def button_lambda_handler_updates(widget):
     print("confirmed "+ widget["text"])
 
+def button_lambda_handler_priority(widget):
+    print("confirmed "+ widget["text"])
+    priority.append(True)
 
 def combobox_handler(event):
     print(event.widget["text"] + " Selected = " + str(event.widget.get()))
@@ -60,11 +64,11 @@ def sort_doing(all_Doing_task, todo, doing, done, widget):
         root = all_Doing_task[d][1]
         #all_task = new_list_task
         #print(all_task)
-        createTask(widget, todo, doing, done, root, new_list_task)
+        createTask(widget, todo, doing, done, root, new_list_task, priority)
     # step 3: loop through list of sorted task to create new tasks in Doing
 
 
-def createTask(widget, todo, doing, done, box, all_task):
+def createTask(widget, todo, doing, done, box, all_task, priority):
     temp = all_task[2]
     print("confirmed " + widget["text"] + " TASK CREATED")
     newTask = Task(all_task[0], all_task[1], all_task[2])
@@ -79,7 +83,12 @@ def createTask(widget, todo, doing, done, box, all_task):
     if all_task[2] == 'Done':
         clmn = done
         share_done.append([all_task[0], all_task[1]])
-    task_frame = Frame(clmn, highlightcolor="blue", highlightbackground="blue", highlightthickness=5)
+
+    if priority[-1] == False:
+        color = "blue"
+    else:
+        color = "red"
+    task_frame = Frame(clmn, highlightcolor=color, highlightbackground=color, highlightthickness=5)
     if all_task[2] == 'Doing':
         all_Doing_task[all_task[1]].append(task_frame)   # assign date key to task frame
     print(all_Doing_task)
@@ -123,6 +132,7 @@ def add_task_button(todo_frame, doing_frame, done_frame):
 
     root.columnconfigure(0, weight=1)
     root.columnconfigure(1, weight=1)
+    root.columnconfigure(2, weight=1)
 
     label1 = ttk.Label(root)
     label1["text"] = "TaskName: "
@@ -146,11 +156,16 @@ def add_task_button(todo_frame, doing_frame, done_frame):
     radio_button1 = ttk.Radiobutton(root, value=0, variable=control, text="set Reminder",
                                     command=lambda: button_lambda_handler_updates(radio_button1))
 
-    radio_button2 = ttk.Radiobutton(root, value=1, variable=control, text="Done",
-                                    command=lambda: createTask(radio_button2, todo_frame, doing_frame, done_frame, root, all_task))
+    radio_button3 = ttk.Radiobutton(root, value=2, variable=control, text="priority HIGH",
+                                    command=lambda: button_lambda_handler_priority(radio_button3))
 
+    radio_button2 = ttk.Radiobutton(root, value=1, variable=control, text="Done",
+                                    command=lambda: createTask(radio_button2, todo_frame, doing_frame, done_frame, root, all_task, priority))
+
+    priority.append(False)
     radio_button1.grid(row=3, column=0)
-    radio_button2.grid(row=3, column=1)
+    radio_button2.grid(row=3, column=2)
+    radio_button3.grid(row = 3, column = 1)
 
     text_field1.bind("<KeyRelease-Return>", enter_release_text_handler_entry)
     text_field1.bind("<KeyRelease-Return>", save_database, add='+')
