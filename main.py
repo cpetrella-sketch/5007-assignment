@@ -47,7 +47,7 @@ def sort_doing(all_Doing_task, todo, doing, done, widget):
     for key in all_Doing_task:
         listDate.append(key)
         frame = all_Doing_task[key][1]
-        delete_frame(frame)
+        delete_frame(frame, "Doing", all_Doing_task[key][0], key)
 
     # Step 2: sort all tasks based on due date
     listDate.sort(key=lambda date: datetime.strptime(date, "%d-%m-%Y "))
