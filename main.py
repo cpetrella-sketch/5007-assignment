@@ -224,23 +224,23 @@ def update_entry(event, label, num, clmn, name, date):
     if num == 1:
         if clmn == "To Do":
             share_todo.remove([name, date])
-            share_todo.append([label, date])
+            share_todo.append([label["text"], date])
         if clmn == "Doing":
             share_doing.remove([name, date])
-            share_doing.append([label, date])
+            share_doing.append([label["text"], date])
         if clmn == "Done":
             share_done.remove([name, date])
-            share_done.append([label, date])
+            share_done.append([label["text"], date])
     if num == 2:
         if clmn == "To Do":
             share_todo.remove([name, date])
-            share_todo.append([name, label])
+            share_todo.append([name, label["text"]])
         if clmn == "Doing":
             share_doing.remove([name, date])
-            share_doing.append([name, label])
+            share_doing.append([name, label["text"]])
         if clmn == "Done":
             share_done.remove([name, date])
-            share_done.append([name, label])
+            share_done.append([name, label["text"]])
 
 def share_tasks():
     with open("output.csv", 'w') as f:
